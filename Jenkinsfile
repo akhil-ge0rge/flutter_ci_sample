@@ -2,14 +2,19 @@ pipeline {
     agent any
 
     environment {
-        FLUTTER_HOME = "/usr/local/flutter" // <-- Change this if Flutter is in a different path
-        PATH = "${FLUTTER_HOME}/bin:${env.PATH}"
+        PATH = "/opt/flutter/bin:/opt/android-sdk/platform-tools:/opt/android-sdk/cmdline-tools/latest/bin:${env.PATH}"
     }
 
     stages {
-        stage('Clone Repo') {
+        stage('Trust Flutter Folder') {
             steps {
-                git branch: 'main', url: 'https://github.com/akhil-ge0rge/flutter_ci_sample.git'
+                sh 'git config --global --add safe.directory /opt/flutter'
+            }
+        }
+
+        stage('Flutter Doctor') {
+            steps {
+                sh 'flutter doctor'
             }
         }
 
